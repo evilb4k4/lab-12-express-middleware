@@ -58,7 +58,7 @@ describe('testing movie routes', () => {
         .put(`${API_URL}/api/movie/${tempMovie._id}`)
         .send({
           name: 'John Wick 2',
-          score: '2 thumbs up',
+          review: '2 thumbs up',
         })
         .then(res => {
           expect(res.status).toEqual(200);
