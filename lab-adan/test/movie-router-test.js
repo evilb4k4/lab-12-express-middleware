@@ -4,7 +4,7 @@ const expect = require('expect');
 const server = require('../lib/server.js');
 
 const API_URL = `http://localhost:${process.env.PORT}`;
-let tempGame;
+let tempMovie;
 
 describe('testing movie routes', () => {
   before(server.start);
@@ -15,16 +15,15 @@ describe('testing movie routes', () => {
       return superagent
         .post(`${API_URL}/api/movie`)
         .send({
-          name: 'Sonic',
-          score: '9000',
+          name: 'John Wick',
+          review: 'A most watch movie',
         })
         .then(res => {
           expect(res.status).toEqual(200);
           expect(res.body._id).toExist();
-          expect(res.body.name).toEqual('Sonic');
-          expect(res.body.score).toEqual('9000');
-          expect(res.body.created).toExist();
-          tempGame = res.body;
+          expect(res.body.name).toEqual('John Wick');
+          expect(res.body.review).toEqual('A most watch movie');
+          tempMovie = res.body;
         });
     });
 
@@ -38,13 +37,12 @@ describe('testing movie routes', () => {
   describe('testing GET /api/movie', () => {
     it('should respond with a movie', () => {
       return superagent
-        .get(`${API_URL}/api/movie/${tempGame._id}`)
+        .get(`${API_URL}/api/movie/${tempMovie._id}`)
         .then(res => {
           expect(res.status).toEqual(200);
           expect(res.body._id).toExist();
-          expect(res.body.name).toEqual('Sonic');
-          expect(res.body.score).toEqual('9000');
-          expect(res.body.created).toExist();
+          expect(res.body.name).toEqual('John Wick');
+          expect(res.body.review).toEqual('A most watch movie');
         });
     });
     it('should respond with a 404 not found', () => {
@@ -57,15 +55,15 @@ describe('testing movie routes', () => {
   describe('testing PUT /api/movie', () => {
     it('should respond with a 200 and updated movie', () => {
       return superagent
-        .put(`${API_URL}/api/movie/${tempGame._id}`)
+        .put(`${API_URL}/api/movie/${tempMovie._id}`)
         .send({
-          name: 'Sonic the Hedgehog',
-          score: '19000',
+          name: 'John Wick 2',
+          score: '2 thumbs up',
         })
         .then(res => {
           expect(res.status).toEqual(200);
-          expect(res.body.name).toEqual('Sonic the Hedgehog');
-          expect(res.body.score).toEqual('19000');
+          expect(res.body.name).toEqual('John Wick 2');
+          expect(res.body.review).toEqual('2 thumbs up');
         });
     });
   });
@@ -73,7 +71,7 @@ describe('testing movie routes', () => {
   describe('testing DELETE /api/movie', () => {
     it('should respond with a 200', () => {
       return superagent
-        .delete(`${API_URL}/api/movie/${tempGame._id}`)
+        .delete(`${API_URL}/api/movie/${tempMovie._id}`)
         .then(res => {
           expect(res.status).toEqual(200);
           expect(res.body._id).toNotExist();
